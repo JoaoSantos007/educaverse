@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educaverse</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav">
+            <div class="logo">EDUCAVERSE</div>
+            
+            <div class="pesquisa">
+                <input type="text" placeholder="Buscar..." class="pesquisa-input">
+                <button class="pesquisa-btn">🔍</button>
+            </div>
+
+            <nav class="menu">
+                <a href="/">Inicio</a>
+                <a href="#">Cursos</a>
+                <a href="#">Workshops</a>
+                <a href="#">Eventos</a>
+                <a href="/login.html" class="login" id="loginBtn">Login</a>
+                <a href="#" class="login" id="sairBtn" style="display: none;">Sair</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="main">
+        <div class="welcome-message" id="welcomeMessage" style="display: none;">
+            <h2>Bem-vindo de volta, <span id="userName"></span>!</h2>
+        </div>
+
+        <div class="images-container">
+            <div class="image-card">
+                <div class="image-wrapper">
+                    <img src="https://t90132715151.p.clickup-attachments.com/t90132715151/a2a18277-55e4-4ccf-8fac-1a11b6c2b835/generated-image-d3f1c4eb-5018-404a-a70f-28aeebac9792.png?view=open" alt="Cursos" class="section-image">
+                </div>
+                <button class="image-btn">Cursos</button>
+            </div>
+            
+            <div class="image-card">
+                <div class="image-wrapper">
+                    <img src="https://t90132715151.p.clickup-attachments.com/t90132715151/34d76ef7-0d97-4b75-a6e0-b6acb9543766/generated-image-f1727928-3f71-49f0-aac3-330348adf674.png?view=open" alt="Eventos" class="section-image">
+                </div>
+                <button class="image-btn">Eventos</button>
+            </div>
+            
+            <div class="image-card">
+                <div class="image-wrapper">
+                    <img src="https://t90132715151.p.clickup-attachments.com/t90132715151/1b6c7486-d04e-47cc-8b2b-07704480b699/generated-image-c35c00d3-6898-4032-b3cb-46b7277494ce.png?view=open" alt="Workshops" class="section-image">
+                </div>
+                <button class="image-btn">Workshops</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#">Sobre</a>
+            <a href="/contato.html">Contato</a>
+            <a href="#">Política de Privacidade</a>
+        </div>
+    </footer>
+
+    <script>
+        // Verificar se usuário está logado
+        async function verificarLogin() {
+            try {
+                const usuario_id = localStorage.getItem('usuario_id')
+                
+                const response = await fetch(`http://localhost:3000/verificar-login?usuario_id=${usuario_id}`)
+                const data = await response.json()
+                
+                if (data.logado) {
+                    // Usuário está logado
+                    document.getElementById('loginBtn').style.display = 'none'
+                    document.getElementById('sairBtn').style.display = 'block'
+                    document.getElementById('welcomeMessage').style.display = 'block'
+                    document.getElementById('userName').textContent = data.usuario.nome
+                }
+            } catch (error) {
+                console.log('Erro ao verificar login:', error)
+            }
+        }
+
+        // Função de logout
+        document.getElementById('sairBtn').addEventListener('click', function(e) {
+            e.preventDefault()
+            localStorage.removeItem('usuario_id')
+            localStorage.removeItem('usuario_nome')
+            window.location.reload()
+        })
+
+        // Executar quando a página carregar
+        document.addEventListener('DOMContentLoaded', verificarLogin)
+    </script>
+</body>
+</html>

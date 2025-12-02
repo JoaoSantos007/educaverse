@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contate-nos - Educaverse</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="contato.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav">
+            <div class="logo">EDUCAVERSE</div>
+
+            <nav class="menu">
+                <a href="/">Inicio</a>
+                <a href="#">Cursos</a>
+                <a href="#">Workshops</a>
+                <a href="#">Eventos</a>
+                <a href="/login.html" class="login">Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <h1 class="page-title">EDUCAVERSE</h1>
+        <p class="page-subtitle">Tire suas dúvidas sobre nossas formações, planos e tecnologia</p>
+
+        <div class="contact-container">
+            <!-- Formulário de Contato -->
+            <div class="contact-form">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Nome</label>
+                        <input type="text" id="name" placeholder="Escreva seu nome" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="Escreva seu email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Assunto</label>
+                        <textarea id="subject" placeholder="Descreva sua dúvida" required></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Enviar</button>
+                </form>
+            </div>
+
+            <!-- Informações de Contato -->
+            <div class="contact-info">
+                <h2 class="contact-title">ENTRE EM CONTATO</h2>
+
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-text">
+                            <strong>Email:</strong><br>
+                            educaverse@gmail.com<br>
+                            educaverse@gmail.com.br
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-text">
+                            <strong>Telefone:</strong><br>
+                            0800 0800 0800 ou (18) 99999-9999
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-text">
+                            <strong>Endereço:</strong><br>
+                            Av. Manoel Goulart 129,<br>
+                            Jardim Brasil
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="contact-text">
+                            <strong>Horário de Funcionamento:</strong><br>
+                            Segunda a Quinta: 8h às 18h<br>
+                            Sexta-feira: 8h às 17h
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-hashtag"></i>
+                    </div>
+                    <div class="contact-text">
+                        <strong>Redes Sociais:</strong><br>
+                        @educaverse
+                    </div>
+                </div>
+
+                <div class="social-links">
+                    <a href="#" class="social-link">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#">Sobre</a>
+            <a href="/contato.html">Contato</a>
+            <a href="#">Política de Privacidade</a>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById("contactForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const nome = document.getElementById("name").value
+            const email = document.getElementById("email").value
+            const assunto = document.getElementById("subject").value
+
+            console.log("Enviando dados:", { nome, email, assunto })
+
+            try {
+                const resposta = await fetch(`http://localhost:3000/contato`, {
+                    method: "POST",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "nome": nome,
+                        "email": email,
+                        "assunto": assunto
+                    })
+                })
+
+                console.log("Status:", resposta.status)
+                console.log("Resposta completa:", resposta)
+
+                const dados = await resposta.json()
+                console.log("Dados recebidos do backend:", dados)
+
+                alert(dados.resposta)
+                if (dados.resposta === "Mensagem enviada com sucesso!") {
+                    document.getElementById("contactForm").reset()
+                }
+
+            } catch (error) {
+                console.log("Erro no frontend:", error)
+                alert("Erro de conexão: " + error.message)
+            }
+        })
+    </script>
+</body>
+</html>

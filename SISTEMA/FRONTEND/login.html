@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Educaverse</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="nav">
+            <div class="logo">EDUCAVERSE</div>
+            <nav class="menu">
+                <a href="/">Inicio</a>
+                <a href="#">Cursos</a>
+                <a href="#">Workshops</a>
+                <a href="#">Eventos</a>
+                <a href="/login.html" class="login">Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="login-container">
+        <form class="login-form" id="loginForm">
+            <h2 class="login-title">Fazer Login</h2>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Digite seu email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" placeholder="Digite sua senha" required>
+            </div>
+            
+            <button type="submit" class="login-btn">Entrar</button>
+            
+            <div class="login-links">
+                <a href="/cadastro.html">Não tem conta? Cadastrar</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById("email").value;
+            const senha = document.getElementById("senha").value;
+
+            if (email == "") {
+                alert("Preencha o campo email");
+                return;
+            } else if (senha == "") {
+                alert("Preencha o campo senha");
+                return;
+            }
+
+            try {
+                const resposta = await fetch('http://localhost:3000/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        senha: senha
+                    })
+                });
+
+                const dados = await resposta.json();
+                alert(dados.resposta);
+
+                if (dados.resposta === "Login realizado com sucesso!") {
+                    localStorage.setItem('usuario_id', dados.usuario_id);
+                    localStorage.setItem('usuario_nome', dados.nome);
+                    window.location.href = '/';
+                }
+
+            } catch (error) {
+                alert('Erro de conexão com o servidor');
+            }
+        });
+    </script>
+</body>
+</html>

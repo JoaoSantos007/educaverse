@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Educaverse</title>
+    <link rel="stylesheet" href="cadastro.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="nav">
+            <div class="logo">EDUCAVERSE</div>
+            <nav class="menu">
+                <a href="/">Inicio</a>
+                <a href="#">Cursos</a>
+                <a href="#">Workshops</a>
+                <a href="#">Eventos</a>
+                <a href="/login.html" class="login">Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="cadastro-container">
+        <form class="cadastro-form" id="cadastroForm">
+            <h2 class="cadastro-title">Criar Conta</h2>
+            
+            <div class="form-group">
+                <label for="nome">Nome Completo</label>
+                <input type="text" id="nome" placeholder="Digite seu nome completo" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Digite seu email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" placeholder="Digite sua senha (mínimo 6 caracteres)" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmarSenha">Confirmar Senha</label>
+                <input type="password" id="confirmarSenha" placeholder="Digite a senha novamente" required>
+            </div>
+            
+            <button type="submit" class="cadastro-btn">Cadastrar</button>
+            
+            <div class="cadastro-links">
+                <a href="/login.html">Já tem conta? Fazer Login</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("cadastroForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            const nome = document.getElementById("nome").value;
+            const email = document.getElementById("email").value;
+            const senha = document.getElementById("senha").value;
+            const confirmarSenha = document.getElementById("confirmarSenha").value;
+
+            if (nome == "") {
+                alert("Preencha o campo nome");
+                return;
+            } else if (nome.length < 2) {
+                alert("O nome deve ter pelo menos 2 caracteres");
+                return;
+            } else if (email == "") {
+                alert("Preencha o campo email");
+                return;
+            } else if (!email.includes('@')) {
+                alert("Email precisa ter @");
+                return;
+            } else if (!email.includes('.')) {
+                alert("Email precisa ter ponto");
+                return;
+            } else if (senha == "") {
+                alert("Preencha o campo senha");
+                return;
+            } else if (senha.length < 6) {
+                alert("A senha deve ter no mínimo 6 caracteres");
+                return;
+            } else if (confirmarSenha == "") {
+                alert("Confirme sua senha");
+                return;
+            } else if (senha !== confirmarSenha) {
+                alert("As senhas não coincidem");
+                return;
+            }
+
+            try {
+                const resposta = await fetch('http://localhost:3000/cadastro', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        nome: nome,
+                        email: email,
+                        senha: senha
+                    })
+                });
+
+                const dados = await resposta.json();
+                alert(dados.resposta);
+
+                if (dados.resposta === "cadastro efetuado com sucesso") {
+                    window.location.href = '/login.html';
+                }
+
+            } catch (error) {
+                alert('Erro de conexão com o servidor');
+            }
+        });
+    </script>
+</body>
+</html>
